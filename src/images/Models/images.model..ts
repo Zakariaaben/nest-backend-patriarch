@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -28,4 +29,7 @@ export class Image extends Model {
     allowNull: false,
   })
   projectId: number;
+
+  @BelongsTo(() => Project)
+  project: Project;
 }

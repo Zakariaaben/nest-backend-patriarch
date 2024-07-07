@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
-import { Sequelize } from 'sequelize-typescript';
-import { Project } from './projects/models/project.model';
-import { ProjectsModule } from './projects/projects.module';
-import { ImagesModule } from './images/images.module';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoriesModule } from './categories/categories.module';
+import { ImagesModule } from './images/images.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [

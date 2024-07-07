@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Project } from 'src/projects/models/project.model';
 
 @Table
 export class Category extends Model {
@@ -14,4 +15,7 @@ export class Category extends Model {
     allowNull: false,
   })
   name: string;
+
+  @HasMany(() => Project)
+  project: Project[];
 }
