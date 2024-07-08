@@ -81,17 +81,23 @@ export class ProjectsService {
     return this.projectModel.create(project);
   }
 
-  async updateProjectDto(updateProjectDto: createProjectDto) {
+  async updateProjectDto(updateProjectDto: createProjectDto, id: number) {
     const { name, description, categoryId } = updateProjectDto;
 
     const category = await this.categoryService.getCategoryById(categoryId);
 
-    const project = {
-      name,
-      description,
-      categoryId: category.id,
-    };
+    const updatedProject = await this.projectModel.update(
+      { name, description, categoryId: category.id },
+      { where: { id } },
+    );
 
-    category.update(Project);
+    if (updatedProject[0] === 0) {
+      throw new HttpException(
+        `Project with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return updatedProject;
   }
 }

@@ -33,9 +33,16 @@ export class ProjectsController {
     return this.projectsService.createProject(createProjectDto);
   }
 
-  @Put()
+  @Put(':id')
   @UsePipes(ValidationPipe)
-  updateProject(@Body() createProjectDto: createProjectDto) {
-    return this.projectsService.updateProjectDto(createProjectDto);
+  async updateProject(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createProjectDto: createProjectDto,
+  ) {
+    const updatedProject = await this.projectsService.updateProjectDto(
+      createProjectDto,
+      id,
+    );
+    return updatedProject;
   }
 }
