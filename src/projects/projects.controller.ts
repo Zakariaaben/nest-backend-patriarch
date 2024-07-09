@@ -47,7 +47,10 @@ export class ProjectsController {
     const filenames = await this.fileUploadService.uploadImages(
       req.files as Express.Multer.File[],
     );
-    return filenames;
+
+    const project = await this.projectsService.createProject(createProjectDto);
+
+    return { filenames, project };
   }
 
   @Put(':id')
