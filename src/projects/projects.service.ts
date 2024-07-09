@@ -97,4 +97,8 @@ export class ProjectsService {
 
     return updatedProject;
   }
+
+  deleteProject(id: number) {
+    return this.projectModel.destroy({ where: { id } });
+  }
 }

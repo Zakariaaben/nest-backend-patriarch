@@ -25,6 +25,7 @@ export class Image extends Model {
 
   @ForeignKey(() => Project)
   @Column({
+    onDelete: 'CASCADE',
     type: DataType.INTEGER,
     allowNull: false,
   })

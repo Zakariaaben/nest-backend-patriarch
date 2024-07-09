@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -47,23 +48,41 @@ export class ProjectsController {
     const filenames = await this.fileUploadService.uploadImages(
       req.files as Express.Multer.File[],
     );
-
     const project = await this.projectsService.createProject(createProjectDto);
-
-    return { filenames, project };
+    const images = await this.imageService.storeImageUrls(
+      filenames as string[],
+      project.id,
+    );
+    return this.projectsService.getProjectById(project.id);
   }
 
   @Put(':id')
-  @UsePipes(ValidationPipe, categoryIdValidationPipe)
+  @UseInterceptors(FilesInterceptor('images'))
+  @UsePipes()
   async updateProject(
-    @Param('id', ParseIntPipe) id: number,
     @Body() createProjectDto: createProjectDto,
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
   ) {
+    console.log(createProjectDto);
     const updatedProject = await this.projectsService.updateProjectDto(
       createProjectDto,
       id,
     );
+    const images = await this.imageService.getImagesByProjectId(id);
+    console.log(req.files.length);
+    if (req.files.length != 0) {
+      const filenames = await this.fileUploadService.uploadImages(
+        req.files as Express.Multer.File[],
+      );
+      await this.imageService.storeImageUrls(filenames as string[], id);
+    }
 
-    return updatedProject;
+    return this.getProjectById(id);
+  }
+
+  @Delete(':id')
+  async deleteProject(@Param('id', ParseIntPipe) id: number) {
+    return this.projectsService.deleteProject(id);
   }
 }

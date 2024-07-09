@@ -12,9 +12,8 @@ import { ProjectsModule } from './projects/projects.module';
       port: 3306,
       username: 'root',
       password: '',
-      database: 'nest-sequelize',
-      sync: { alter: true },
       autoLoadModels: true,
+      database: 'new-db',
     }),
 
     ProjectsModule,
@@ -23,7 +22,7 @@ import { ProjectsModule } from './projects/projects.module';
 
     CategoriesModule,
   ],
-  controllers: [],
   providers: [],
+  controllers: [],
 })
 export class AppModule {}

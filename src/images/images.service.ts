@@ -8,4 +8,8 @@ export class ImagesService {
   storeImageUrls(urls: string[], projectId: number) {
     return this.imageModel.bulkCreate(urls.map((url) => ({ url, projectId })));
   }
+
+  getImagesByProjectId(projectId: number) {
+    return this.imageModel.findAll({ where: { projectId } });
+  }
 }

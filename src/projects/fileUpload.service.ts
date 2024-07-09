@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-
+import * as sharp from 'sharp';
 @Injectable()
 export class FileUploadService {
   constructor() {}
@@ -10,7 +10,7 @@ export class FileUploadService {
     return new Promise(async (resolve, reject) => {
       try {
         await this.verifyFileExtension(files);
-        const fileNames = await this.writeFilesToDisk(files);
+        const fileNames = await this.sharpToWebp(files);
         resolve(fileNames);
       } catch (err) {
         reject(err);
@@ -68,6 +68,29 @@ export class FileUploadService {
           resolve(fileNames);
         });
       });
+    });
+  }
+
+  sharpToWebp(files: Express.Multer.File[]) {
+    return new Promise(async (resolve, reject) => {
+      const fileNames: string[] = [];
+      try {
+        for (const file of files) {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const filename = uniqueSuffix + '-' + file.originalname;
+          await sharp(file.buffer)
+            .webp()
+            .toFile('uploads/' + path.parse(filename).name + '.webp');
+          fileNames.push(encodeURI(path.parse(filename).name + '.webp'));
+        }
+      } catch {
+        reject(
+          new HttpException('Error saving images', HttpStatus.BAD_REQUEST),
+        );
+      } finally {
+        resolve(fileNames);
+      }
     });
   }
 }

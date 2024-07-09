@@ -37,7 +37,7 @@ export class Project extends Model {
   })
   categoryId: number;
 
-  @HasMany(() => Image)
+  @HasMany(() => Image, { onDelete: 'CASCADE' })
   images: Image[];
 
   @BelongsTo(() => Category)

@@ -26,7 +26,9 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/sequelize": "^10.0.1",
     "@nestjs/swagger": "^7.4.0",
+    "@sequelize/core": "^7.0.0-alpha.37",
     "@types/body-parser": "^1.19.5",
+    "@types/sharp": "^0.32.0",
     "body-parser": "^1.20.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -35,7 +37,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "sequelize": "^6.37.3",
-    "sequelize-typescript": "^2.1.6"
+    "sequelize-typescript": "^2.1.6",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
