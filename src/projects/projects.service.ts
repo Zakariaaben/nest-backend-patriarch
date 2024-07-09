@@ -69,13 +69,10 @@ export class ProjectsService {
 
   async createProject(createProjectDto: createProjectDto) {
     const { name, description, categoryId } = createProjectDto;
-
-    const category = await this.categoryService.getCategoryById(categoryId);
-
     const project = {
       name,
       description,
-      categoryId: category.id,
+      categoryId,
     };
 
     return this.projectModel.create(project);
