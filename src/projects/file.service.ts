@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as sharp from 'sharp';
 @Injectable()
-export class FileUploadService {
+export class FileService {
   constructor() {}
 
   uploadImages(files: Express.Multer.File[]) {
@@ -78,11 +78,13 @@ export class FileUploadService {
         for (const file of files) {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const filename = uniqueSuffix + '-' + file.originalname;
+          const filename =
+            slugify(path.parse(uniqueSuffix + '-' + file.originalname).name) +
+            '.webp';
           await sharp(file.buffer)
             .webp()
-            .toFile('uploads/' + path.parse(filename).name + '.webp');
-          fileNames.push(encodeURI(path.parse(filename).name + '.webp'));
+            .toFile('uploads/' + filename);
+          fileNames.push(filename);
         }
       } catch {
         reject(
@@ -93,4 +95,33 @@ export class FileUploadService {
       }
     });
   }
+
+  DeleteFilesFromDisk(files: string[]) {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        files.forEach((file) => {
+          fs.unlinkSync('uploads/' + file);
+        });
+        resolve();
+      } catch (err) {
+        reject(
+          new HttpException(
+            'Error deleting images: file Not found',
+            HttpStatus.BAD_REQUEST,
+          ),
+        );
+      }
+    });
+  }
+}
+
+function slugify(str: string) {
+  return String(str)
+    .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+    .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+    .trim() // trim leading or trailing whitespace
+    .toLowerCase() // convert to lowercase
+    .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+    .replace(/\s+/g, '-') // replace spaces with hyphens
+    .replace(/-+/g, '-'); // remove consecutive hyphens
 }

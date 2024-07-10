@@ -37,7 +37,16 @@ export class CategoriesService {
         HttpStatus.NOT_FOUND,
       );
     }
-    await category.destroy();
-    return category;
+    try {
+      await category.destroy();
+    } catch (e) {
+      throw new HttpException(
+        {
+          message: `Cannot Delete category ${category.name}. Projects belong to this category `,
+          details: e.message,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }

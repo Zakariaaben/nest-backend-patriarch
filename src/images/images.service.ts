@@ -12,4 +12,8 @@ export class ImagesService {
   getImagesByProjectId(projectId: number) {
     return this.imageModel.findAll({ where: { projectId } });
   }
+
+  deleteImagesByProjectId(projectId: number) {
+    return this.imageModel.destroy({ where: { projectId } });
+  }
 }

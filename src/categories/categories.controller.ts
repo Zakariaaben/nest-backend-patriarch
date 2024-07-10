@@ -32,7 +32,8 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  deleteCategory(@Param('id', ParseIntPipe) id: number) {
-    return this.categoriesService.deleteCategory(id);
+  async deleteCategory(@Param('id', ParseIntPipe) id: number) {
+    await this.categoriesService.getCategoryById(id);
+    await this.categoriesService.deleteCategory(id);
   }
 }

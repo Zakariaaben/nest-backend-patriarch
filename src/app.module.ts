@@ -3,6 +3,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoriesModule } from './categories/categories.module';
 import { ImagesModule } from './images/images.module';
 import { ProjectsModule } from './projects/projects.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +23,10 @@ import { ProjectsModule } from './projects/projects.module';
     ImagesModule,
 
     CategoriesModule,
+
+    UsersModule,
+
+    AuthModule,
   ],
   providers: [],
   controllers: [],

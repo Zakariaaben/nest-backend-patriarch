@@ -16,6 +16,6 @@ export class Category extends Model {
   })
   name: string;
 
-  @HasMany(() => Project)
+  @HasMany(() => Project, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
   project: Project[];
 }
