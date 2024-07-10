@@ -1,29 +1,48 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { UserDto } from './dtos/createUser.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
   @Get()
   findAllUsers() {
-    return 'This action returns all users';
+    return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOneUser() {
-    return 'This action returns a #${id} user';
+  findOneUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findById(id);
   }
 
   @Post()
-  createUser() {
-    return 'This action adds a new user';
+  @UsePipes(ValidationPipe)
+  createUser(@Body() newUser: UserDto) {
+    return this.usersService.createUser(newUser);
   }
 
   @Put(':id')
-  updateUser() {
-    return 'This action updates a #${id} user';
+  @UsePipes(ValidationPipe)
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatedUser: UserDto,
+  ) {
+    return this.usersService.updateUser(id, updatedUser);
   }
 
   @Delete(':id')
-  deleteUser() {
-    return 'This action removes a #${id} user';
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
   }
 }

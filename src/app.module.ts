@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ImagesModule } from './images/images.module';
 import { ProjectsModule } from './projects/projects.module';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,10 +18,12 @@ import { AuthModule } from './auth/auth.module';
       autoLoadModels: true,
       database: 'new-db',
     }),
-
-    ProjectsModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
 
     ImagesModule,
+    ProjectsModule,
 
     CategoriesModule,
 

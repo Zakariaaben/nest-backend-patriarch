@@ -49,10 +49,7 @@ export class ProjectsController {
       req.files as Express.Multer.File[],
     );
     const project = await this.projectsService.createProject(createProjectDto);
-    const images = await this.imageService.storeImageUrls(
-      filenames as string[],
-      project.id,
-    );
+    await this.imageService.storeImageUrls(filenames as string[], project.id);
     return this.projectsService.getProjectById(project.id);
   }
 
@@ -64,8 +61,6 @@ export class ProjectsController {
     @Req() req: Request,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    console.log(req.files);
-    console.log(id);
     if (req.files.length != 0) {
       // Delete old images from database
       const images = await this.imageService.getImagesByProjectId(id);
