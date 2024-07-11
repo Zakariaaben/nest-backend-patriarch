@@ -27,7 +27,7 @@ export class AuthController {
 
     this.authService.setCookie(res, token.access_token);
 
-    return { message: 'logged in scuccessfully' };
+    return { Message: 'logged in scuccessfully' };
   }
 
   @UseGuards(AuthGuard)
@@ -37,10 +37,9 @@ export class AuthController {
     return { message: 'logged out successfully' };
   }
 
+  @UseGuards(AuthGuard)
   @Get('check-auth')
   async isAuth(@Req() req: Request) {
-    console.log('verify');
-    const payload = this.authService.verifyToken(req.cookies.jwt);
-    return payload;
+    return req['user'];
   }
 }

@@ -3,12 +3,11 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
   Post,
-  Put,
   Req,
-  UnauthorizedException,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -38,19 +37,11 @@ export class UsersController {
     return this.usersService.createUser(newUser);
   }
 
-  @Put(':id')
+  @HttpCode(200)
+  @Post('changecredentials')
   @UsePipes(ValidationPipe)
-  updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatedUser: UserDto,
-    @Req() request: Request,
-  ) {
-    console.log(request['user']);
-    if (request['user'].sub != id) {
-      throw new UnauthorizedException(
-        "You don't have enough permissions to achieve this Action.",
-      );
-    }
+  updateUser(@Body() updatedUser: UserDto, @Req() request: Request) {
+    const id = request['user'].sub;
     return this.usersService.updateUser(id, updatedUser);
   }
 

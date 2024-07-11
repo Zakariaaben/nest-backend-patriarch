@@ -74,9 +74,9 @@ export class UsersService {
     throw new HttpException(`User with ID ${id} deleted`, HttpStatus.OK);
   }
 
-  async findByName(name: string) {
+  async findByName(username: string) {
     return await this.UserModel.findOne({
-      where: { name },
+      where: { username },
     });
   }
 

@@ -19,16 +19,23 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractJwtTokenFromCookies(request);
 
+    const payload = await this.verifyToken(token);
+    request['user'] = payload;
+    return true;
+  }
+
+  private extractJwtTokenFromCookies(request: Request): string | undefined {
+    return request.cookies['jwt'];
+  }
+
+  async verifyToken(token: string) {
     if (!token) {
       throw new UnauthorizedException();
     }
-
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET_KEY,
       });
-
-      request['user'] = payload;
 
       const user = await this.usersService.findById(payload.sub);
       if (!user) {
@@ -37,13 +44,9 @@ export class AuthGuard implements CanActivate {
       if (new Date(user.updatedAt).getTime() > payload.iat * 1000) {
         throw new Error();
       }
+      return payload;
     } catch {
       throw new UnauthorizedException();
     }
-    return true;
-  }
-
-  private extractJwtTokenFromCookies(request: Request): string | undefined {
-    return request.cookies['jwt'];
   }
 }
