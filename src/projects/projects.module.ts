@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoriesModule } from 'src/categories/categories.module';
 import { ImagesModule } from 'src/images/images.module';
+import { UsersModule } from 'src/users/users.module';
 import { FileService } from './file.service';
 import { Project } from './models/project.model';
 import { ProjectsController } from './projects.controller';
@@ -12,6 +13,7 @@ import { ProjectsService } from './projects.service';
     SequelizeModule.forFeature([Project]),
     CategoriesModule,
     ImagesModule,
+    UsersModule,
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService, FileService],

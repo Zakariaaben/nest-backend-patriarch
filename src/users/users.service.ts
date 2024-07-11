@@ -22,17 +22,17 @@ export class UsersService {
   }
 
   async createUser(newUser: UserDto) {
-    const userExists = await this.findByName(newUser.name);
+    const userExists = await this.findByName(newUser.username);
     if (userExists) {
       throw new HttpException(
-        `User with name '${newUser.name}' already exists`,
+        `User with name '${newUser.username}' already exists`,
         HttpStatus.BAD_REQUEST,
       );
     }
     newUser.password = await this.hashPassword(newUser.password);
 
     const user = await this.UserModel.create(
-      newUser as { name: string; password: string },
+      newUser as { username: string; password: string },
     );
     const { password, ...result } = user.get();
     return result;
@@ -48,10 +48,10 @@ export class UsersService {
       );
     }
 
-    const userExists = await this.findByName(updatedUser.name);
+    const userExists = await this.findByName(updatedUser.username);
     if (userExists && userExists.id !== id) {
       throw new HttpException(
-        `Can't use name '${updatedUser.name}', already exists`,
+        `Can't use name '${updatedUser.username}', already exists`,
         HttpStatus.BAD_REQUEST,
       );
     }

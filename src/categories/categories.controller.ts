@@ -6,9 +6,11 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { CategoriesService } from './categories.service';
 import { createCategoryDto } from './dtos/createCategory.dto';
 
@@ -25,12 +27,14 @@ export class CategoriesController {
     return this.categoriesService.getCategoryById(id);
   }
 
+  @UseGuards(AuthGuard)
   @Post()
   @UsePipes(ValidationPipe)
   createCategory(@Body() createCategoryDto: createCategoryDto) {
     return this.categoriesService.createCategory(createCategoryDto.name);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteCategory(@Param('id', ParseIntPipe) id: number) {
     await this.categoriesService.getCategoryById(id);

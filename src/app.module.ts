@@ -23,6 +23,7 @@ import { UsersModule } from './users/users.module';
     }),
 
     ImagesModule,
+
     ProjectsModule,
 
     CategoriesModule,

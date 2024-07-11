@@ -17,7 +17,8 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromCookies(request);
+    const token = this.extractJwtTokenFromCookies(request);
+
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -26,11 +27,9 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET_KEY,
       });
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
+
       request['user'] = payload;
 
-      // verify if jwt was created after last user update
       const user = await this.usersService.findById(payload.sub);
       if (!user) {
         throw new Error();
@@ -44,7 +43,7 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromCookies(request: Request): string | undefined {
+  private extractJwtTokenFromCookies(request: Request): string | undefined {
     return request.cookies['jwt'];
   }
 }

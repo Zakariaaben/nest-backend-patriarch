@@ -8,9 +8,11 @@ async function bootstrap() {
   app.useStaticAssets('uploads', {
     prefix: '/uploads',
   });
+  app.enableCors();
   app.use(cookieParser());
   app.useBodyParser('json');
   app.useBodyParser('urlencoded', { extended: true });
+  app.setGlobalPrefix('api');
   await app.listen(3000);
 }
 bootstrap();

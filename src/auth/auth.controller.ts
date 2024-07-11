@@ -1,4 +1,14 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserDto } from 'src/users/dtos/createUser.dto';
 import { AuthGuard } from './auth.guard';
@@ -7,20 +17,30 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UsePipes(ValidationPipe)
   @Post('login')
   async login(
     @Body() Credentials: UserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const token = await this.authService.login(Credentials);
+
     this.authService.setCookie(res, token.access_token);
 
     return { message: 'logged in scuccessfully' };
   }
 
   @UseGuards(AuthGuard)
-  @Post('logout')
-  logout(@Req() req: Request) {
-    return req['user'];
+  @Get('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    this.authService.logout(res);
+    return { message: 'logged out successfully' };
+  }
+
+  @Get('check-auth')
+  async isAuth(@Req() req: Request) {
+    console.log('verify');
+    const payload = this.authService.verifyToken(req.cookies.jwt);
+    return payload;
   }
 }

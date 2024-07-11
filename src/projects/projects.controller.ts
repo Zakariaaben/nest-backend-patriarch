@@ -8,12 +8,14 @@ import {
   Post,
   Put,
   Req,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { categoryIdValidationPipe } from 'src/categories/categoryId.validation';
 import { ImagesService } from 'src/images/images.service';
 import { createProjectDto } from './dtos/createProject.dto';
@@ -38,6 +40,7 @@ export class ProjectsController {
     return this.projectsService.getProjectById(id);
   }
 
+  @UseGuards(AuthGuard)
   @Post()
   @UsePipes(ValidationPipe, categoryIdValidationPipe)
   @UseInterceptors(FilesInterceptor('images'))
@@ -53,6 +56,7 @@ export class ProjectsController {
     return this.projectsService.getProjectById(project.id);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   @UseInterceptors(FilesInterceptor('images'))
   @UsePipes(ValidationPipe, categoryIdValidationPipe)
@@ -83,6 +87,7 @@ export class ProjectsController {
     return this.getProjectById(id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteProject(@Param('id', ParseIntPipe) id: number) {
     const project = await this.projectsService.getProjectById(id);
