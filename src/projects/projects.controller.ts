@@ -31,7 +31,7 @@ export class ProjectsController {
   ) {}
 
   @Get()
-  findAllProjects() {
+  findAllProjects(@Req() req: Request) {
     return this.projectsService.getAll();
   }
 

@@ -35,6 +35,8 @@ export class ProjectsService {
       description: project.description,
       images: project.images.map((image: Image) => image.url),
       category: project.category,
+      date: project.date,
+      created_at: project.createdAt,
     }));
   }
 
@@ -64,27 +66,29 @@ export class ProjectsService {
       description: project.description,
       images: project.images.map((image: Image) => image.url),
       category: project.category,
+      date: project.date,
     };
   }
 
   async createProject(createProjectDto: createProjectDto) {
-    const { name, description, categoryId } = createProjectDto;
+    const { name, description, categoryId, date } = createProjectDto;
     const project = {
       name,
       description,
       categoryId,
+      date,
     };
 
     return this.projectModel.create(project);
   }
 
   async updateProjectDto(updateProjectDto: createProjectDto, id: number) {
-    const { name, description, categoryId } = updateProjectDto;
+    const { name, description, categoryId, date } = updateProjectDto;
 
     const category = await this.categoryService.getCategoryById(categoryId);
 
     const updatedProject = await this.projectModel.update(
-      { name, description, categoryId: category.id },
+      { name, description, categoryId: category.id, date },
       { where: { id } },
     );
 

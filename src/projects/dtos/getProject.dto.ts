@@ -6,4 +6,5 @@ export class getProjectDto {
   description: string;
   images: string[];
   category: getCategoryDto;
+  date: string;
 }

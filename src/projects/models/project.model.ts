@@ -26,7 +26,7 @@ export class Project extends Model {
   name: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT({ length: 'long' }),
   })
   description: string;
 
@@ -36,6 +36,12 @@ export class Project extends Model {
     allowNull: false,
   })
   categoryId: number;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  date: string;
 
   @HasMany(() => Image, { onDelete: 'CASCADE' })
   images: Image[];

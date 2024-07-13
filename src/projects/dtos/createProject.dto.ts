@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsNumberString, MinLength } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumberString,
+  MinLength,
+} from 'class-validator';
 
 export class createProjectDto {
   @IsNotEmpty()
@@ -12,4 +17,8 @@ export class createProjectDto {
   @IsNotEmpty()
   @IsNumberString()
   categoryId: number;
+
+  @IsNotEmpty()
+  @IsDateString()
+  date: Date;
 }
