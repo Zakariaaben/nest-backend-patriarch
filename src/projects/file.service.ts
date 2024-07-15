@@ -78,10 +78,15 @@ export class FileService {
         for (const file of files) {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const metadata = sharp(file.buffer).metadata();
+
           const filename =
             slugify(path.parse(uniqueSuffix + '-' + file.originalname).name) +
             '.webp';
           await sharp(file.buffer)
+            .withMetadata()
+            .rotate()
+            .resize()
             .webp()
             .toFile('uploads/' + filename);
           fileNames.push(filename);
