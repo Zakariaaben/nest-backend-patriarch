@@ -24,9 +24,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const token = await this.authService.login(Credentials);
-
     this.authService.setCookie(res, token.access_token);
-
     return { Message: 'logged in scuccessfully' };
   }
 
