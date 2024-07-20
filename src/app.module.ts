@@ -7,6 +7,7 @@ import { sequelizeConfigAsync } from './config/sequelize.config';
 import { ImagesModule } from './images/images.module';
 import { ProjectsModule } from './projects/projects.module';
 import { UsersModule } from './users/users.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -24,6 +25,8 @@ import { UsersModule } from './users/users.module';
     UsersModule,
 
     AuthModule,
+
+    EmailModule,
   ],
   providers: [],
   controllers: [],
