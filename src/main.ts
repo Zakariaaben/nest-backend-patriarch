@@ -12,7 +12,6 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useBodyParser('json');
   app.useBodyParser('urlencoded', { extended: true });
-  app.setGlobalPrefix('api');
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
