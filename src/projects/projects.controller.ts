@@ -83,7 +83,9 @@ export class ProjectsController {
 
       // Delete old images from disk
       const imageURLS = images.map((image) => decodeURI(image.url));
-      await this.fileService.DeleteFilesFromDisk(imageURLS);
+      await this.fileService
+        .DeleteFilesFromDisk(imageURLS)
+        .catch((e) => console.error(e));
 
       // Upload new images
       const filenames = await this.fileService.uploadImages(
@@ -103,7 +105,10 @@ export class ProjectsController {
   async deleteProject(@Param('id', ParseIntPipe) id: number) {
     const project = await this.projectsService.getProjectById(id);
     await this.projectsService.deleteProject(id);
-    await this.fileService.DeleteFilesFromDisk(project.images);
+
+    await this.fileService
+      .DeleteFilesFromDisk(project.images)
+      .catch((e) => console.error(e));
 
     return project;
   }
