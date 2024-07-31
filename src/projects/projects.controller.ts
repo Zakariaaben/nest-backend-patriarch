@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
   UseInterceptors,
@@ -19,6 +20,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { categoryIdValidationPipe } from 'src/categories/categoryId.validation';
 import { ImagesService } from 'src/images/images.service';
 import { createProjectDto } from './dtos/createProject.dto';
+import { searchParamsDto } from './dtos/searchParams.dto';
 import { FileService } from './file.service';
 import { ProjectsService } from './projects.service';
 
@@ -31,8 +33,17 @@ export class ProjectsController {
   ) {}
 
   @Get()
-  findAllProjects(@Req() req: Request) {
-    return this.projectsService.getAll();
+  findAllProjects(
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        forbidNonWhitelisted: true,
+        whitelist: true,
+      }),
+    )
+    params: searchParamsDto,
+  ) {
+    return this.projectsService.getAll(params);
   }
 
   @Get(':id')

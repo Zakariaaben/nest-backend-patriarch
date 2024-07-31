@@ -5,6 +5,7 @@ import { Category } from 'src/categories/models/category.model';
 import { Image } from 'src/images/Models/images.model.';
 import { createProjectDto } from './dtos/createProject.dto';
 import { getProjectDto } from './dtos/getProject.dto';
+import { searchParamsDto } from './dtos/searchParams.dto';
 import { Project } from './models/project.model';
 
 @Injectable()
@@ -15,8 +16,13 @@ export class ProjectsService {
     private readonly categoryService: CategoriesService,
   ) {}
 
-  async getAll(): Promise<getProjectDto[]> {
+  async getAll(params: searchParamsDto): Promise<getProjectDto[]> {
+    const { categoryId, page } = params;
     const projects = await this.projectModel.findAll({
+      where: categoryId ? { categoryId } : {},
+      limit: page ? 6 : undefined,
+      offset: page ? (page - 1) * 6 : undefined,
+
       include: [
         {
           model: Image,
